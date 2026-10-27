@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt pytest ruff
+      - name: Lint
+        run: ruff check --line-length 120 .
+      - name: Tests (convergencia en AND/OR/NAND, XOR no separable, smoke test de la app)
+        run: pytest -q
